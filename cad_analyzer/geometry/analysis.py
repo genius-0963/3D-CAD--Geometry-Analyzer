@@ -22,7 +22,7 @@ class CurvatureAnalysis:
     """Container for surface curvature analysis results."""
     gaussian_curvature: np.ndarray  # Per-vertex Gaussian curvature
     mean_curvature: np.ndarray     # Per-vertex mean curvature
-    curvature_distribution: Dict[str, np.ndarray]  # Histograms of curvature values
+    curvature_distribution: Dict[str, np.ndarray]  #Histograms of curvature values
     
 @dataclass
 class UndercutAnalysis:
