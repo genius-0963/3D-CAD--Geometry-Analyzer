@@ -1,4 +1,4 @@
-""
+"""
 Main analyzer class for the 3D CAD Geometry Analyzer.
 """
 from typing import Dict, Any, Optional, Union

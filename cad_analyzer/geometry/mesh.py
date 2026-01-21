@@ -1,4 +1,4 @@
-""
+"""
 Core mesh class for 3D geometry representation and manipulation.
 """
 from typing import Optional, Tuple, Dict, Any, List

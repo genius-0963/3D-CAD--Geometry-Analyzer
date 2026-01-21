@@ -1,4 +1,4 @@
-""
+"""
 STL file loader implementation.
 """
 from pathlib import Path
@@ -6,7 +6,7 @@ from typing import Dict, Any, List, Tuple
 import numpy as np
 import open3d as o3d
 
-from . import BaseCADLoader
+from .base_loader import BaseCADLoader
 from ..geometry.mesh import Mesh
 
 class STLLoader(BaseCADLoader):

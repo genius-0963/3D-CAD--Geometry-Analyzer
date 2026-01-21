@@ -1,7 +1,7 @@
-""
+"""
 Geometry analysis module for manufacturability assessment.
 """
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 import numpy as np
 import open3d as o3d
 from scipy import spatial
@@ -12,7 +12,7 @@ from .mesh import Mesh
 class WallThicknessAnalysis:
     """Container for wall thickness analysis results."""
     min_thickness: float
-    max_thickness: float
+    max_thickness: float 
     avg_thickness: float
     thickness_distribution: np.ndarray  # Histogram of thickness values
     thin_regions: np.ndarray  # Indices of triangles with thickness below threshold
