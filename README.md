@@ -1072,6 +1072,6 @@ If you find this project useful, please consider giving it a ⭐ on GitHub!
 
 **Built with ❤️ by the CAD Analyzer Team**
 
-[Documentation](https://cad-analyzer.readthedocs.io) • [Examples](examples/) • [API Reference](docs/API.md) • [Contributing](CONTRIBUTING.md)
+• [Examples](examples/) • [API Reference](docs/API.md) • [Contributing](CONTRIBUTING.md)
 
 </div>
