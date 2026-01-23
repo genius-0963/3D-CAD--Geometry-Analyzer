@@ -1,4 +1,4 @@
- pull """
+"""
 File handling module for CAD file operations.
 
 This module provides base classes and implementations for loading and processing
@@ -36,5 +36,4 @@ def get_loader_for_file(file_path: str) -> Type[BaseCADLoader]:
     raise ValueError(
         f"No loader found for file: {file_path}. "
         f"Supported formats: {', '.join(fmt for loader in AVAILABLE_LOADERS for fmt in loader.supported_formats())}"
-    )
     )
