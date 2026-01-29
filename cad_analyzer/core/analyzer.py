@@ -8,7 +8,7 @@ import numpy as np
 
 from ..file_handling import STLLoader, BaseCADLoader
 from ..geometry.mesh import Mesh
-from ..geometry.analysis import GeometryAnalyzer, WallThicknessAnalysis, CurvatureAnalysis, UndercutAnalysis
+from ..geometry.analysis_simple import GeometryAnalyzer, WallThicknessAnalysis, CurvatureAnalysis, UndercutAnalysis
 
 class CADAnalyzer:
     """

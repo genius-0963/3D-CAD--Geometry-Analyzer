@@ -7,7 +7,7 @@ from enum import Enum
 from typing import List, Dict, Any, Optional, Tuple
 import numpy as np
 
-from ..mesh import Mesh
+from ...geometry.mesh import Mesh
 from .violation import Violation, ViolationSeverity, ViolationType
 
 class DesignRule(ABC):

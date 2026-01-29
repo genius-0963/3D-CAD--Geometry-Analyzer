@@ -1,0 +1,32 @@
+Metadata-Version: 2.4
+Name: 3d-cad-geometry-analyzer
+Version: 0.1.0
+Summary: A comprehensive tool for analyzing 3D CAD geometry
+Author: Your Name
+Author-email: your.email@example.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.8
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: open3d>=0.15.1
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: torch>=1.9.0
+Requires-Dist: torch-geometric>=2.0.0
+Requires-Dist: tensorflowjs>=3.18.0
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: black>=21.0; extra == "dev"
+Requires-Dist: flake8>=3.9; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
