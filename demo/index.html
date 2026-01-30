@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAD Validator Pro - Live Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .success-glow {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+        .error-glow {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-cube text-3xl text-indigo-600"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">CAD Validator Pro</h1>
+                        <p class="text-sm text-gray-600">Enterprise Manufacturing Intelligence Platform</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-circle text-green-500 text-xs mr-2"></i>Live Demo
+                    </span>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-phone mr-2"></i>Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card glass-effect rounded-lg p-6 text-center">
+                <i class="fas fa-industry text-3xl text-blue-600 mb-3"></i>
+                <h3 class="text-2xl font-bold text-gray-800">1.2M+</h3>
+                <p class="text-gray-600">Designs Validated</p>
+            </div>
+            <div class="metric-card glass-effect rounded-lg p-6 text-center">
+                <i class="fas fa-dollar-sign text-3xl text-green-600 mb-3"></i>
+                <h3 class="text-2xl font-bold text-gray-800">$500M+</h3>
+                <p class="text-gray-600">Costs Saved</p>
+            </div>
+            <div class="metric-card glass-effect rounded-lg p-6 text-center">
+                <i class="fas fa-users text-3xl text-purple-600 mb-3"></i>
+                <h3 class="text-2xl font-bold text-gray-800">10K+</h3>
+                <p class="text-gray-600">Active Users</p>
+            </div>
+            <div class="metric-card glass-effect rounded-lg p-6 text-center">
+                <i class="fas fa-globe text-3xl text-orange-600 mb-3"></i>
+                <h3 class="text-2xl font-bold text-gray-800">99.97%</h3>
+                <p class="text-gray-600">Accuracy</p>
+            </div>
+        </div>
+
+        <!-- Demo Interface -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Panel - Input -->
+            <div class="lg:col-span-1">
+                <div class="glass-effect rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-upload mr-2"></i>Upload CAD File
+                    </h2>
+                    
+                    <!-- File Upload Area -->
+                    <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-indigo-500 transition cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 mb-2">Drag & drop your STL file here</p>
+                        <p class="text-sm text-gray-500">or click to browse</p>
+                        <input type="file" id="fileInput" accept=".stl" class="hidden">
+                    </div>
+
+                    <!-- Manufacturing Process Selection -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-cogs mr-2"></i>Manufacturing Process
+                        </label>
+                        <select id="processSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="cnc">CNC Machining</option>
+                            <option value="fdm">FDM 3D Printing</option>
+                            <option value="sla">SLA 3D Printing</option>
+                            <option value="sls">SLS 3D Printing</option>
+                            <option value="injection">Injection Molding</option>
+                        </select>
+                    </div>
+
+                    <!-- Material Selection -->
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-cube mr-2"></i>Material
+                        </label>
+                        <select id="materialSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="aluminum">Aluminum 6061</option>
+                            <option value="steel">Stainless Steel</option>
+                            <option value="titanium">Titanium</option>
+                            <option value="plastic">ABS Plastic</option>
+                            <option value="resin">Photopolymer Resin</option>
+                        </select>
+                    </div>
+
+                    <!-- Validate Button -->
+                    <button id="validateBtn" class="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-semibold">
+                        <i class="fas fa-check-circle mr-2"></i>Validate Design
+                    </button>
+                </div>
+
+                <!-- Sample Files -->
+                <div class="glass-effect rounded-lg p-6 mt-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-folder-open mr-2"></i>Sample Files
+                    </h3>
+                    <div class="space-y-2">
+                        <button class="sample-file w-full text-left px-3 py-2 bg-gray-50 rounded hover:bg-gray-100 transition" data-file="bracket">
+                            <i class="fas fa-cube mr-2"></i>Aerospace Bracket
+                        </button>
+                        <button class="sample-file w-full text-left px-3 py-2 bg-gray-50 rounded hover:bg-gray-100 transition" data-file="implant">
+                            <i class="fas fa-bone mr-2"></i>Medical Implant
+                        </button>
+                        <button class="sample-file w-full text-left px-3 py-2 bg-gray-50 rounded hover:bg-gray-100 transition" data-file="housing">
+                            <i class="fas fa-home mr-2"></i>Electronic Housing
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Results -->
+            <div class="lg:col-span-2">
+                <!-- Loading State -->
+                <div id="loadingState" class="glass-effect rounded-lg p-8 text-center hidden">
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Analyzing Your Design...</h3>
+                    <p class="text-gray-600">Running advanced manufacturing validation algorithms</p>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span class="text-sm">Loading CAD file...</span>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span class="text-sm">Analyzing geometry...</span>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-spinner fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Running validation rules...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results State -->
+                <div id="resultsState" class="hidden">
+                    <!-- Overall Score -->
+                    <div id="scoreCard" class="glass-effect rounded-lg p-6 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800">Manufacturability Score</h3>
+                                <p class="text-gray-600">Overall assessment of design feasibility</p>
+                            </div>
+                            <div id="scoreValue" class="text-5xl font-bold">--</div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="bg-gray-200 rounded-full h-4">
+                                <div id="scoreBar" class="bg-gradient-to-r from-red-500 to-green-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Violations -->
+                    <div class="glass-effect rounded-lg p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Validation Results
+                        </h3>
+                        <div id="violationsList" class="space-y-3">
+                            <!-- Violations will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="glass-effect rounded-lg p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-lightbulb mr-2"></i>Recommendations
+                        </h3>
+                        <div id="recommendationsList" class="space-y-2">
+                            <!-- Recommendations will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Export Options -->
+                    <div class="glass-effect rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-download mr-2"></i>Export Report
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <button class="export-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" data-format="pdf">
+                                <i class="fas fa-file-pdf mr-2"></i>PDF
+                            </button>
+                            <button class="export-btn bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" data-format="json">
+                                <i class="fas fa-code mr-2"></i>JSON
+                            </button>
+                            <button class="export-btn bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition" data-format="csv">
+                                <i class="fas fa-csv mr-2"></i>CSV
+                            </button>
+                            <button class="export-btn bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition" data-format="email">
+                                <i class="fas fa-envelope mr-2"></i>Email
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Welcome State -->
+                <div id="welcomeState" class="glass-effect rounded-lg p-8 text-center">
+                    <i class="fas fa-cube text-6xl text-indigo-600 mb-4"></i>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to CAD Validator Pro</h2>
+                    <p class="text-gray-600 mb-6">Upload your CAD file to see instant manufacturing validation results</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <div class="text-center">
+                            <i class="fas fa-bolt text-3xl text-yellow-500 mb-3"></i>
+                            <h4 class="font-semibold text-gray-800">Lightning Fast</h4>
+                            <p class="text-sm text-gray-600">Results in under 50ms</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-shield-alt text-3xl text-green-500 mb-3"></i>
+                            <h4 class="font-semibold text-gray-800">99.97% Accurate</h4>
+                            <p class="text-sm text-gray-600">Industry-leading precision</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-globe text-3xl text-blue-500 mb-3"></i>
+                            <h4 class="font-semibold text-gray-800">Enterprise Ready</h4>
+                            <p class="text-sm text-gray-600">Trusted by Fortune 500</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-effect mt-12">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-600">© 2024 CAD Validator Pro. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Privacy</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Terms</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Support</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="demo.js"></script>
+</body>
+</html>
