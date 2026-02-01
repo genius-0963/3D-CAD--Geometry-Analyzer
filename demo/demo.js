@@ -164,42 +164,215 @@ class CADValidatorDemo {
     }
 
     generateMockResults() {
-        const processConfigs = {
-            cnc: { baseScore: 85, commonViolations: ['wall_thickness', 'corner_radius'] },
-            fdm: { baseScore: 75, commonViolations: ['overhang', 'wall_thickness'] },
-            sla: { baseScore: 80, commonViolations: ['wall_thickness', 'surface_finish'] },
-            sls: { baseScore: 78, commonViolations: ['wall_thickness', 'tolerance'] },
-            injection: { baseScore: 70, commonViolations: ['draft_angle', 'wall_thickness'] }
-        };
-
-        const config = processConfigs[this.currentProcess];
-        const scoreVariation = Math.random() * 20 - 10;
-        const finalScore = Math.max(0, Math.min(100, config.baseScore + scoreVariation));
+        // Realistic validation based on file and process
+        const fileAnalysis = this.analyzeFile(this.currentFile.name);
+        const processConstraints = this.getProcessConstraints(this.currentProcess);
+        const materialConstraints = this.getMaterialConstraints(this.currentMaterial);
         
-        const violationTypes = {
-            wall_thickness: { severity: 'warning', message: 'Wall thickness below minimum requirement' },
-            overhang: { severity: 'error', message: 'Overhang angle exceeds process limit' },
-            corner_radius: { severity: 'info', message: 'Corner radius may require special tooling' },
-            surface_finish: { severity: 'warning', message: 'Surface finish may not meet requirements' },
-            tolerance: { severity: 'error', message: 'Tolerance too tight for selected process' },
-            draft_angle: { severity: 'error', message: 'Insufficient draft angle for molding' }
-        };
-
+        // Calculate realistic score based on multiple factors
+        let baseScore = 85; // Start with good score
         const violations = [];
-        const numViolations = finalScore > 80 ? 0 : Math.floor(Math.random() * 3) + 1;
         
-        for (let i = 0; i < numViolations; i++) {
-            const violationType = config.commonViolations[Math.floor(Math.random() * config.commonViolations.length)];
-            violations.push(violationTypes[violationType]);
+        // Analyze file-specific issues
+        if (fileAnalysis.hasThinWalls) {
+            const minThickness = processConstraints.minWallThickness;
+            if (fileAnalysis.wallThickness < minThickness) {
+                violations.push({
+                    type: 'wall_thickness',
+                    severity: fileAnalysis.wallThickness < minThickness * 0.5 ? 'error' : 'warning',
+                    message: `Wall thickness ${fileAnalysis.wallThickness.toFixed(1)}mm is below minimum ${minThickness}mm for ${this.getProcessName(this.currentProcess)}`,
+                    data: { measured: fileAnalysis.wallThickness, minimum: minThickness }
+                });
+                baseScore -= 15;
+            }
         }
-
+        
+        if (fileAnalysis.hasSharpCorners) {
+            const minRadius = processConstraints.minCornerRadius;
+            violations.push({
+                type: 'corner_radius',
+                severity: 'warning',
+                message: `Sharp corners detected - minimum radius ${minRadius}mm recommended for ${this.getProcessName(this.currentProcess)}`,
+                data: { recommended: minRadius }
+            });
+            baseScore -= 10;
+        }
+        
+        if (fileAnalysis.hasSmallFeatures) {
+            const minFeature = processConstraints.minFeatureSize;
+            if (fileAnalysis.minFeatureSize < minFeature) {
+                violations.push({
+                    type: 'small_features',
+                    severity: 'error',
+                    message: `Features as small as ${fileAnalysis.minFeatureSize.toFixed(1)}mm may not be manufacturable`,
+                    data: { measured: fileAnalysis.minFeatureSize, minimum: minFeature }
+                });
+                baseScore -= 20;
+            }
+        }
+        
+        // Process-specific violations
+        if (this.currentProcess === 'fdm' || this.currentProcess === 'sla') {
+            if (fileAnalysis.hasOverhangs) {
+                const maxOverhang = processConstraints.maxOverhangAngle;
+                violations.push({
+                    type: 'overhang_angle',
+                    severity: 'warning',
+                    message: `Overhang angles exceed ${maxOverhang}° - may require support structures`,
+                    data: { maxAngle: maxOverhang }
+                });
+                baseScore -= 12;
+            }
+        }
+        
+        if (this.currentProcess === 'injection') {
+            if (fileAnalysis.hasDraftIssues) {
+                violations.push({
+                    type: 'draft_angle',
+                    severity: 'error',
+                    message: `Insufficient draft angles for injection molding - minimum ${processConstraints.minDraftAngle}° required`,
+                    data: { required: processConstraints.minDraftAngle }
+                });
+                baseScore -= 18;
+            }
+        }
+        
+        // Material-specific considerations
+        if (this.currentMaterial === 'titanium') {
+            violations.push({
+                type: 'material_difficulty',
+                severity: 'info',
+                message: `Titanium requires specialized tooling and longer processing times`,
+                data: { material: this.currentMaterial }
+            });
+            baseScore -= 5;
+        }
+        
+        // Add some realistic tolerances
+        if (fileAnalysis.hasTightTolerances) {
+            const processTolerance = processConstraints.typicalTolerance;
+            violations.push({
+                type: 'tolerance',
+                severity: 'warning',
+                message: `Tight tolerances specified - typical tolerance for ${this.getProcessName(this.currentProcess)} is ±${processTolerance}mm`,
+                data: { specified: '±0.05mm', typical: processTolerance }
+            });
+            baseScore -= 8;
+        }
+        
+        // Ensure score is within bounds
+        const finalScore = Math.max(0, Math.min(100, baseScore + Math.random() * 10 - 5));
+        
         return {
             score: Math.round(finalScore),
             violations: violations,
             process: this.currentProcess,
             material: this.currentMaterial,
-            processingTime: Math.round(Math.random() * 50 + 10)
+            processingTime: Math.round(50 + violations.length * 15 + Math.random() * 30),
+            fileAnalysis: fileAnalysis
         };
+    }
+    
+    analyzeFile(fileName) {
+        // Analyze based on filename patterns
+        const analysis = {
+            hasThinWalls: false,
+            hasSharpCorners: false,
+            hasSmallFeatures: false,
+            hasOverhangs: false,
+            hasDraftIssues: false,
+            hasTightTolerances: false,
+            wallThickness: 2.5,
+            minFeatureSize: 3.0
+        };
+        
+        if (fileName.includes('Aerospace') || fileName.includes('Bracket')) {
+            analysis.hasThinWalls = true;
+            analysis.wallThickness = 1.2;
+            analysis.hasSharpCorners = true;
+            analysis.hasTightTolerances = true;
+            analysis.minFeatureSize = 1.5;
+        } else if (fileName.includes('Medical') || fileName.includes('Implant')) {
+            analysis.hasSmallFeatures = true;
+            analysis.minFeatureSize = 0.8;
+            analysis.hasTightTolerances = true;
+            analysis.hasOverhangs = true;
+        } else if (fileName.includes('Electronic') || fileName.includes('Housing')) {
+            analysis.hasThinWalls = true;
+            analysis.wallThickness = 2.0;
+            analysis.hasSmallFeatures = true;
+            analysis.minFeatureSize = 1.0;
+            analysis.hasDraftIssues = true;
+        }
+        
+        return analysis;
+    }
+    
+    getProcessConstraints(process) {
+        const constraints = {
+            cnc: {
+                minWallThickness: 1.5,
+                minCornerRadius: 0.5,
+                minFeatureSize: 1.0,
+                typicalTolerance: 0.1,
+                maxOverhangAngle: 90
+            },
+            fdm: {
+                minWallThickness: 0.8,
+                minCornerRadius: 0.4,
+                minFeatureSize: 0.6,
+                typicalTolerance: 0.2,
+                maxOverhangAngle: 45
+            },
+            sla: {
+                minWallThickness: 0.6,
+                minCornerRadius: 0.3,
+                minFeatureSize: 0.4,
+                typicalTolerance: 0.05,
+                maxOverhangAngle: 60
+            },
+            sls: {
+                minWallThickness: 1.0,
+                minCornerRadius: 0.5,
+                minFeatureSize: 0.8,
+                typicalTolerance: 0.15,
+                maxOverhangAngle: 70
+            },
+            injection: {
+                minWallThickness: 2.0,
+                minCornerRadius: 0.3,
+                minFeatureSize: 1.2,
+                typicalTolerance: 0.05,
+                minDraftAngle: 3,
+                maxOverhangAngle: 3
+            }
+        };
+        
+        return constraints[process] || constraints.cnc;
+    }
+    
+    getMaterialConstraints(material) {
+        const constraints = {
+            aluminum: { difficulty: 'medium', machinability: 'good' },
+            steel: { difficulty: 'high', machinability: 'fair' },
+            titanium: { difficulty: 'very_high', machinability: 'poor' },
+            plastic: { difficulty: 'low', machinability: 'excellent' },
+            resin: { difficulty: 'low', machinability: 'excellent' }
+        };
+        
+        return constraints[material] || constraints.aluminum;
+    }
+    
+    getProcessName(process) {
+        const names = {
+            cnc: 'CNC Machining',
+            fdm: 'FDM 3D Printing',
+            sla: 'SLA 3D Printing',
+            sls: 'SLS 3D Printing',
+            injection: 'Injection Molding'
+        };
+        
+        return names[process] || process;
     }
 
     showLoadingState() {
