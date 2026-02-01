@@ -13,7 +13,7 @@
 
 *Trusted by Fortune 500 companies for critical manufacturing validation*
 
-[🚀 Live Demo](#-live-demo) • [📊 Case Studies](#-case-studies) • [🏭 Enterprise Features](#-enterprise-features) • [📈 ROI Calculator](#-roi-calculator) • [🎯 Industries](#-industries-served)
+[ Case Studies](#-case-studies) • [🏭 Enterprise Features](#-enterprise-features) • [📈 ROI Calculator](#-roi-calculator) • [🎯 Industries](#-industries-served)
 
 </div>
 
@@ -108,31 +108,6 @@
 - **Quality Control**: Six Sigma and statistical process control
 - **Cost Reduction**: Design-to-cost optimization
 - **Innovation**: Rapid prototyping and iteration
-
----
-
-## 🚀 **Live Demo**
-
-### 🎮 **Interactive Demo Platform**
-Experience the full power of CAD Validator Pro with our interactive demo:
-
-- **[🔗 Try Live Demo](https://demo.cadvalidator.com)** - No registration required
-- **[🎥 Video Demo](https://demo.cadvalidator.com/video)** - 5-minute product tour
-- **[📊 Sample Reports](https://demo.cadvalidator.com/samples)** - Real validation examples
-
-### 💻 **API Playground**
-Test our validation engine with your own CAD files:
-
-```bash
-curl -X POST "https://api.cadvalidator.com/v2/validate" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "file_url": "https://example.com/part.stl",
-    "manufacturing_process": "cnc_machining",
-    "material": "aluminum_6061"
-  }'
-```
 
 ---
 
